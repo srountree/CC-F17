@@ -1,2 +1,2 @@
-# piezo-fail
-Piezo code that doesn't seem to work
+# CC-F17
+Code for Creative Computing/Interation
