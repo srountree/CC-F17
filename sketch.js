@@ -55,7 +55,7 @@ function serialEvent() {
     serial.write('x');
     
     if(inString != "hello"){
-        if (inString.length > 3) {
+        if (inString.length > 2) {
           var sensors = split(inString, ',');
           mic = sensors[0];
           gardenia = sensors[1];
