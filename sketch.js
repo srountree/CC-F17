@@ -61,7 +61,7 @@ function serialEvent() {
           gardenia = sensors[1];
           divine = sensors[2];
           mug = sensors[3];
-          reset = sensors[4];
+          
 
           if(mic > micThresh && cnn.isPlaying() === false){
 
