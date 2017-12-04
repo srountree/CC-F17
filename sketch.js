@@ -1,74 +1,117 @@
 var serial; // variable to hold an instance of the serialport library
 var portName = '/dev/cu.usbmodem1411'; // fill in your serial port name here
-var indata;
-var colorVal = 255;
-var gVal= 165;
-var textVal= 0;
+
+var cnn;
+var mlk;
+var clash;
+var future;
+
+var mic;
+var gardenia;
+var divine;
+var mug;
+
+var micThresh= 20;
+var gardeniaThresh= 20;
+var divineThresh= 20;
+var mugThresh= 20;
+
+//Preload 
+
+
+function preload(){
+    
+    mlk = loadSound('MLK.wav');
+    cnn= createVideo('Media.webm');
+    clash= createVideo('TwoCities.webm');
+    future= loadSound('Forward.wav');   
+}
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
-  serial = new p5.SerialPort(); // make a new instance of the serialport library
-  serial.on('list', printList); // set a callback function for the serialport list event
-  serial.on('connected', serverConnected); // callback for connecting to the server
-  serial.on('open', portOpen); // callback for the port opening
-  serial.on('data', serialEvent); // callback for when new data arrives
-  serial.on('error', serialError); // callback for errors
-  serial.on('close', portClose); // callback for the port closing
-
-  //serial.list(); // list the serial ports
-  serial.open(portName); // open a serial port
- 
+  createCanvas(windowWidth,windowHeight);
+  
+  serial = new p5.SerialPort();
+  serial.on('data', serialEvent);
+  serial.on('error', serialError);
+  serial.open(portName);
+  cnn.hide();
+  clash.hide();
+  
 }
 
 function draw() {
     
-    background(255);
-    noStroke();
-    fill(textVal);
-    textSize(100);
-    text("Rainbow.", 450, 400);
-    fill(colorVal, 0, 0);
-    ellipse(150, 600, 55, 55);
-    fill(colorVal, gVal, 0);
-    ellipse(350, 600, 55, 55);
-    fill(colorVal,colorVal,0);
-    ellipse(550, 600, 55, 55);
-    fill(0,colorVal,0);
-    ellipse(750, 600, 55, 55);
-    fill(0, 0, colorVal);
-    ellipse(950, 600, 55, 55);
-    fill(colorVal, 0, colorVal);
-    ellipse(1150, 600, 55, 55);
- 
-}
+  background(0);
 
+  
+}
 
 function serialEvent() {
-    indata = Number(serial.read());
-    textVal= 0 + indata;
-    colorVal = 255 - indata;
-    gVal= 165 - indata;
+    
+  var inString = serial.readStringUntil('\r\n');
+    
+  if (inString.length > 0 ) {
+      
+    serial.write('x');
+    
+    if(inString != "hello"){
+        if (inString.length > 3) {
+          var sensors = split(inString, ',');
+          mic = sensors[0];
+          gardenia = sensors[1];
+          divine = sensors[2];
+          mug = sensors[3];
+          reset = sensors[4];
+
+          if(mic > micThresh && cnn.isPlaying() === false){
+
+            cnn.play();
+
+          } else if (mic <= micThresh && cnn.isPlaying() === true) {
+
+            cnn.pause(); 
+          }
+
+          if(gardenia > gardeniaThresh && mlk.isPlaying() === false){
+
+            mlk.play();
+
+          } else if (gardenia <= gardeniaThresh && mlk.isPlaying() === true) {
+
+            mlk.pause(); 
+          }
+
+          if(divine > divineThresh && clash.isPlaying() === false){
+
+            clash.play();
+
+          } else if (divine <= divineThresh && clash.isPlaying() === true) {
+
+            clash.pause(); 
+          }
+
+          if(mug > mugThresh && mlk.isPlaying() === false){
+
+            future.play();
+
+          } else if (mug <= mugThresh && future.isPlaying() === true) {
+
+            future.pause(); 
+          }
+       
+
+        }
+        
+        serial.write('x');
+    }
+    
+    
+    
+  }
+    
 }
+  
 
 function serialError(err) {
-  console.log('Something went wrong with the serial port. ' + err);
-}
-
-function portClose() {
-  console.log('The serial port closed.');
-}
-
-function printList(portList) {
-  for (var i = 0; i < portList.length; i++) {
-    console.log(i + " " + portList[i]);
-  }
-}
-
-
-function serverConnected() {
-  console.log('connected to server.');
-}
-
-function portOpen() {
-  console.log('the serial port opened.')
+  println('Something went wrong with the serial port. ' + err);
 }
