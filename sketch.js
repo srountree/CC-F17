@@ -52,6 +52,7 @@ function serialEvent() {
  console.log(inString);
 
   if (inString.length > 0 ) {
+    serial.write('x');
     
     if(inString != "hello"){
         if (inString.length > 2) {
@@ -65,9 +66,8 @@ function serialEvent() {
           if(mic > micThresh && cnn.time() === 0){
 
             cnn.play();
-            mlk.stop();
-            clash.stop();
-            future.stop();
+            cnn.amp(.8);
+            
 
           } else if (mic <= micThresh && cnn.time() > 0) {
 
@@ -77,9 +77,8 @@ function serialEvent() {
           if(gardenia > gardeniaThresh && mlk.isPlaying() === false){
 
             mlk.play();
-            cnn.stop();
-            clash.stop();
-            future.stop();
+            cnn.amp(.8);
+            
 
           } else if (gardenia <= gardeniaThresh && mlk.isPlaying() === true) {
 
@@ -90,9 +89,8 @@ function serialEvent() {
           if(divine > divineThresh && clash.time() === 0){
 
             clash.play();
-            cnn.stop();
-            mlk.stop();
-            future.stop();
+            cnn.amp(.8);
+        
 
           } else if (divine <= divineThresh && clash.time() < 0) {
 
@@ -102,9 +100,8 @@ function serialEvent() {
           if(mug > mugThresh && mlk.isPlaying() === false){
 
             future.play();
-            cnn.stop();
-            mlk.stop();
-            clash.stop();
+            cnn.amp(.8);
+            
 
           } else if (mug <= mugThresh && future.isPlaying() === true) {
 
@@ -114,7 +111,7 @@ function serialEvent() {
 
         }
         
-        serial.write('x');
+    
     }
     
     
