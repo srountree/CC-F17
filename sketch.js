@@ -77,7 +77,7 @@ function serialEvent() {
           if(gardenia > gardeniaThresh && mlk.isPlaying() === false){
 
             mlk.play();
-            cnn.amp(.8);
+            mlk.amp(.8);
             
 
           } else if (gardenia <= gardeniaThresh && mlk.isPlaying() === true) {
@@ -89,7 +89,7 @@ function serialEvent() {
           if(divine > divineThresh && clash.time() === 0){
 
             clash.play();
-            cnn.amp(.8);
+            clash.amp(.8);
         
 
           } else if (divine <= divineThresh && clash.time() < 0) {
@@ -100,7 +100,7 @@ function serialEvent() {
           if(mug > mugThresh && mlk.isPlaying() === false){
 
             future.play();
-            cnn.amp(.8);
+            future.amp(.8);
             
 
           } else if (mug <= mugThresh && future.isPlaying() === true) {
