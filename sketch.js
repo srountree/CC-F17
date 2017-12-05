@@ -11,10 +11,10 @@ var gardenia;
 var divine;
 var mug;
 
-var micThresh= 20;
-var gardeniaThresh= 20;
-var divineThresh= 20;
-var mugThresh= 20;
+var micThresh= 100;
+var gardeniaThresh= 100;
+var divineThresh= 100;
+var mugThresh= 100;
 
 //Preload 
 
@@ -49,10 +49,9 @@ function draw() {
 function serialEvent() {
     
   var inString = serial.readStringUntil('\r\n');
-    
+ console.log(inString);
+
   if (inString.length > 0 ) {
-      
-    serial.write('x');
     
     if(inString != "hello"){
         if (inString.length > 2) {
@@ -61,13 +60,16 @@ function serialEvent() {
           gardenia = sensors[1];
           divine = sensors[2];
           mug = sensors[3];
-          
+         
 
-          if(mic > micThresh && cnn.isPlaying() === false){
+          if(mic > micThresh && cnn.time() === 0){
 
             cnn.play();
+            mlk.stop();
+            clash.stop();
+            future.stop();
 
-          } else if (mic <= micThresh && cnn.isPlaying() === true) {
+          } else if (mic <= micThresh && cnn.time() > 0) {
 
             cnn.pause(); 
           }
@@ -75,17 +77,24 @@ function serialEvent() {
           if(gardenia > gardeniaThresh && mlk.isPlaying() === false){
 
             mlk.play();
+            cnn.stop();
+            clash.stop();
+            future.stop();
 
           } else if (gardenia <= gardeniaThresh && mlk.isPlaying() === true) {
 
             mlk.pause(); 
+              
           }
 
-          if(divine > divineThresh && clash.isPlaying() === false){
+          if(divine > divineThresh && clash.time() === 0){
 
             clash.play();
+            cnn.stop();
+            mlk.stop();
+            future.stop();
 
-          } else if (divine <= divineThresh && clash.isPlaying() === true) {
+          } else if (divine <= divineThresh && clash.time() < 0) {
 
             clash.pause(); 
           }
@@ -93,6 +102,9 @@ function serialEvent() {
           if(mug > mugThresh && mlk.isPlaying() === false){
 
             future.play();
+            cnn.stop();
+            mlk.stop();
+            clash.stop();
 
           } else if (mug <= mugThresh && future.isPlaying() === true) {
 
@@ -111,7 +123,25 @@ function serialEvent() {
     
 }
   
-
 function serialError(err) {
   println('Something went wrong with the serial port. ' + err);
+}
+
+function portClose() {
+  console.log('The serial port closed.');
+}
+
+function printList(portList) {
+  for (var i = 0; i < portList.length; i++) {
+    console.log(i + " " + portList[i]);
+  }
+}
+
+
+function serverConnected() {
+  console.log('connected to server.');
+}
+
+function portOpen() {
+  console.log('the serial port opened.')
 }
